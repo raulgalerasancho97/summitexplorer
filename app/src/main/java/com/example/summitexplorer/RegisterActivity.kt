@@ -1,22 +1,26 @@
 package com.example.summitexplorer
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.summitexplorer.database.dao.UserDao
+import com.example.summitexplorer.database.model.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var userDao: UserDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        userDao = MyApp.database.userDao()
 
         val editTextName = findViewById<EditText>(R.id.editTextName)
         val editTextEmail = findViewById<EditText>(R.id.editTextEmail)
@@ -29,19 +33,25 @@ class RegisterActivity : AppCompatActivity() {
             val password = editTextPassword.text.toString().trim()
 
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                saveUserData(name, email, password)
-                redirectToHome()
+                GlobalScope.launch(Dispatchers.IO) {
+                    if (checkIfUserExists(email)) {
+                        Toast.makeText(this@RegisterActivity, "Email no valido", Toast.LENGTH_SHORT)
+                            .show();
+                    } else {
+                        val newUser = User(username = name, email = email, password = password)
+                        userDao.insertUser(newUser)
+                        redirectToHome()
+                    }
+                }
             } else {
+                // Mostrar mensaje de error indicando que todos los campos son obligatorios
             }
         }
     }
 
-    private fun saveUserData(name: String, email: String, password: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString("username", name)
-        editor.putString("email", email)
-        editor.putString("password", password)
-        editor.apply()
+    private suspend fun checkIfUserExists(email: String): Boolean {
+        val existingUser = userDao.getUserByEmail(email)
+        return existingUser != null
     }
 
     private fun redirectToHome() {
