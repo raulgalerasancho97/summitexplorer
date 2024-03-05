@@ -2,6 +2,7 @@ package com.example.summitexplorer
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -19,14 +20,11 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-
         userDao = MyApp.database.userDao()
-
         val editTextName = findViewById<EditText>(R.id.editTextName)
         val editTextEmail = findViewById<EditText>(R.id.editTextEmail)
         val editTextPassword = findViewById<EditText>(R.id.editTextPassword)
         val buttonRegister = findViewById<Button>(R.id.buttonRegister)
-
         buttonRegister.setOnClickListener {
             val name = editTextName.text.toString().trim()
             val email = editTextEmail.text.toString().trim()
@@ -35,8 +33,15 @@ class RegisterActivity : AppCompatActivity() {
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 GlobalScope.launch(Dispatchers.IO) {
                     if (checkIfUserExists(email)) {
-                        Toast.makeText(this@RegisterActivity, "Email no valido", Toast.LENGTH_SHORT)
-                            .show();
+                        runOnUiThread { //Toast cant run on thread that is not main
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "El email ya existe",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        //Toast.makeText(context,"El email ya esta en uso",Toast.LENGTH_LONG).show();
+                        Log.d("UserDebug", "El email ya existe");
                     } else {
                         val newUser = User(username = name, email = email, password = password)
                         userDao.insertUser(newUser)
