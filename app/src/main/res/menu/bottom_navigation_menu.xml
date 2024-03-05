@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_button"
+        android:enabled="true"
+        android:icon="@drawable/outline_home_24"
+        android:title="Home" />
+    <item
+        android:id="@+id/map_button"
+        android:enabled="true"
+        android:icon="@drawable/outline_map_24"
+        android:title="Map" />
+    <item
+        android:id="@+id/list_button"
+        android:enabled="true"
+        android:icon="@drawable/outline_list_24"
+        android:title="List" />
+    <item
+        android:id="@+id/settings_button"
+        android:enabled="true"
+        android:icon="@drawable/outline_settings_24"
+        android:title="Settings" />
+</menu>
