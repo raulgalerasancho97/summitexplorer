@@ -13,13 +13,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val username = sharedPreferences.getString("username", null)
-        if (username != null && username.isNotEmpty()) {
+        val isLogged = sharedPreferences.getBoolean("isLogged", false)
+        if (isLogged) {
             showHomePage()
         } else {
-            showRegisterPage()
-        }
-    }
+            showLoginPage()
+        }    }
 
     private fun showHomePage() {
         setContentView(R.layout.activity_main)
@@ -52,8 +51,8 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.home_button
     }
 
-    private fun showRegisterPage() {
-        startActivity(Intent(this, RegisterActivity::class.java))
+    private fun showLoginPage() {
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 
