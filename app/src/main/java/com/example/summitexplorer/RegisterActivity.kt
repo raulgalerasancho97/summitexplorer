@@ -25,11 +25,28 @@ class RegisterActivity : AppCompatActivity() {
         val editTextEmail = findViewById<EditText>(R.id.editTextEmail)
         val editTextPassword = findViewById<EditText>(R.id.editTextPassword)
         val buttonRegister = findViewById<Button>(R.id.buttonRegister)
+        val emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
         buttonRegister.setOnClickListener {
             val name = editTextName.text.toString().trim()
             val email = editTextEmail.text.toString().trim()
             val password = editTextPassword.text.toString().trim()
 
+            if (name.isEmpty()) {
+                editTextName.error = "Nombre requerido"
+                return@setOnClickListener
+            }
+            if (email.isEmpty()) {
+                editTextEmail.error = "Email requerido"
+                return@setOnClickListener
+            }
+            if (!email.matches(emailPattern)) {
+                editTextEmail.error = "Formato de email inválido"
+                return@setOnClickListener
+            }
+            if (password.isEmpty()) {
+                editTextPassword.error = "Contraseña requerida"
+                return@setOnClickListener
+            }
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 GlobalScope.launch(Dispatchers.IO) {
                     if (checkIfUserExists(email)) {
