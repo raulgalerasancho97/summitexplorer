@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.summitexplorer.database.dao.UserDao
@@ -26,7 +27,7 @@ class LoginActivity : AppCompatActivity(){
         val editTextEmail = findViewById<EditText>(R.id.editTextEmailLogin)
         val editTextPassword = findViewById<EditText>(R.id.editTextPasswordLogin)
         val buttonLogin = findViewById<Button>(R.id.buttonLogin)
-        val buttonRegister = findViewById<Button>(R.id.buttonToRegister)
+        val registerTextView = findViewById<TextView>(R.id.registerTextView)
         val emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
 
         buttonLogin.setOnClickListener {
@@ -74,7 +75,7 @@ class LoginActivity : AppCompatActivity(){
             }
         }
 
-        buttonRegister.setOnClickListener{
+        registerTextView.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
             finish()

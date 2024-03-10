@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.summitexplorer.database.dao.UserDao
@@ -25,6 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         val editTextEmail = findViewById<EditText>(R.id.editTextEmail)
         val editTextPassword = findViewById<EditText>(R.id.editTextPassword)
         val buttonRegister = findViewById<Button>(R.id.buttonRegister)
+        val loginTextView = findViewById<TextView>(R.id.loginTextView)
         val emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
         buttonRegister.setOnClickListener {
             val name = editTextName.text.toString().trim()
@@ -68,6 +70,11 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 // Mostrar mensaje de error indicando que todos los campos son obligatorios
             }
+        }
+        loginTextView.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
