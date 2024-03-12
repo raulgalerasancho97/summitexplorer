@@ -1,6 +1,8 @@
 package com.example.summitexplorer
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -17,11 +19,13 @@ import kotlinx.coroutines.launch
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var userDao: UserDao
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         userDao = MyApp.database.userDao()
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editTextName = findViewById<EditText>(R.id.editTextName)
         val editTextEmail = findViewById<EditText>(R.id.editTextEmail)
         val editTextPassword = findViewById<EditText>(R.id.editTextPassword)
@@ -59,19 +63,17 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                        //Toast.makeText(context,"El email ya esta en uso",Toast.LENGTH_LONG).show();
-                        Log.d("UserDebug", "El email ya existe");
                     } else {
                         val newUser = User(username = name, email = email, password = password)
                         userDao.insertUser(newUser)
+                        sharedPreferences.edit().putBoolean("isLogged", true).apply()
+                        sharedPreferences.edit().putString("userName", name).apply()
                         redirectToHome()
                     }
                 }
-            } else {
-                // Mostrar mensaje de error indicando que todos los campos son obligatorios
             }
         }
-        loginTextView.setOnClickListener{
+        loginTextView.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()

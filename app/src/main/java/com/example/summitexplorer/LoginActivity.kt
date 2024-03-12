@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class LoginActivity : AppCompatActivity(){
+class LoginActivity : AppCompatActivity() {
     private lateinit var userDao: UserDao
     private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,33 +49,34 @@ class LoginActivity : AppCompatActivity(){
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 GlobalScope.launch(Dispatchers.IO) {
                     if (checkIfUserExists(email)) {
-                        if(userDao.getUserByEmailAndPassword(email, password) != null){
+                        if (userDao.getUserByEmailAndPassword(email, password) != null) {
+                            val username = userDao.getUserByEmail(email)!!.username
                             sharedPreferences.edit().putBoolean("isLogged", true).apply()
+                            sharedPreferences.edit().putString("userName", username).apply()
                             redirectToHome()
-                        }else{
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Credenciales incorrectas",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        } else {
+                            runOnUiThread {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "Credenciales incorrectas",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     } else {
-                        runOnUiThread { //Toast cant run on thread that is not main
+                        runOnUiThread {
                             Toast.makeText(
                                 this@LoginActivity,
                                 "El email no existe",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                        Log.d("UserDebug", "El email no existe");
                     }
                 }
-            } else {
-                // Mostrar mensaje de error indicando que todos los campos son obligatorios
             }
         }
 
-        registerTextView.setOnClickListener{
+        registerTextView.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
             finish()

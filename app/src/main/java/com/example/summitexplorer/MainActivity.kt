@@ -18,7 +18,8 @@ class MainActivity : AppCompatActivity() {
             showHomePage()
         } else {
             showLoginPage()
-        }    }
+        }
+    }
 
     private fun showHomePage() {
         setContentView(R.layout.activity_main)
