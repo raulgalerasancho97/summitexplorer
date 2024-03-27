@@ -1,6 +1,8 @@
 package com.example.summitexplorer
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -12,6 +14,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.summitexplorer.database.dao.RouteDao
+import com.example.summitexplorer.database.dao.UserDao
+import com.example.summitexplorer.database.model.Route
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -29,7 +38,10 @@ class MapFragment : Fragment() {
     private lateinit var cancelRouteButton: Button
     private lateinit var myLocationOverlay: MyLocationNewOverlay
     private lateinit var marker: Marker
-    private var routePoints: MutableList<Pair<GeoPoint, String>> = mutableListOf()
+    private lateinit var newRoute: Route
+    private lateinit var routeDao: RouteDao
+    private lateinit var userDao: UserDao
+    private lateinit var sharedPreferences: SharedPreferences
     private var newRouteMarkers: MutableList<Marker> = mutableListOf()
     private var polyline: Polyline = Polyline()
 
@@ -42,6 +54,16 @@ class MapFragment : Fragment() {
         Configuration.getInstance().load(context, context.getSharedPreferences("osmdroid", 0))
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
+        userDao = MyApp.database.userDao()
+        routeDao = MyApp.database.routeDao()
+        sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userName = sharedPreferences.getString("userName", "Anónimo") ?: "Anónimo"
+        lifecycleScope.launch {
+            val userId = withContext(Dispatchers.IO) {
+                userDao.getUserIdByUsername(userName)
+            }
+            newRoute = Route(userId = userId)
+        }
         mapView = view.findViewById(R.id.mapView)
         routeCreationButton = view.findViewById(R.id.routeCreationButton)
         cancelRouteButton = view.findViewById(R.id.cancelRouteButton)
@@ -87,7 +109,9 @@ class MapFragment : Fragment() {
             } else {
                 routeCreationButton.text = "Crear nueva ruta"
                 cancelRouteButton.visibility = View.GONE // Ocultar el botón de cancelar ruta
-                // TODO saveRouteToDatabase()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    routeDao.insertRoute(newRoute)
+                }
                 Toast.makeText(requireContext(), "Ruta guardada", Toast.LENGTH_SHORT).show()
                 mapView.setOnTouchListener(null)
                 clearRoute()
@@ -136,7 +160,7 @@ class MapFragment : Fragment() {
 
         builder.setPositiveButton("Guardar") { dialog, _ ->
             val name = input.text.toString()
-            routePoints.add(Pair(geoPoint, name))
+            newRoute.addGeoPoint(Pair(geoPoint, name))
             addMarker(geoPoint, name)
             dialog.dismiss()
         }
@@ -159,7 +183,7 @@ class MapFragment : Fragment() {
 
     private fun clearRoute() {
         // Limpiar la lista de puntos y los marcadores en el mapa
-        routePoints.clear()
+        newRoute.clearPoints();
         newRouteMarkers.forEach { mapView.overlays.remove(it) }
         newRouteMarkers.clear()
         mapView.invalidate()

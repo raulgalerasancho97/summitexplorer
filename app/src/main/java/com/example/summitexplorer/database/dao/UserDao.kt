@@ -10,6 +10,8 @@ import com.example.summitexplorer.database.model.User
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(user: User): Long
+    @Query("SELECT id FROM users WHERE username = :username")
+    suspend fun getUserIdByUsername(username: String): Int
 
     @Query("SELECT * FROM users WHERE email = :email")
     suspend fun getUserByEmail(email: String): User?
