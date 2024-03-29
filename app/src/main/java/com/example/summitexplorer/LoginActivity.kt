@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             if (password.isEmpty()) {
-                editTextPassword.error = "Contraseña requerida"
+                editTextPassword.setError("Introduce una contraseña", null)
                 return@setOnClickListener
             }
             if (email.isNotEmpty() && password.isNotEmpty()) {

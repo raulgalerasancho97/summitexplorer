@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
@@ -76,7 +77,6 @@ class MapFragment : Fragment() {
     }
 
 
-
     private fun setupButtons() {
         routeCreationButton.setOnClickListener {
             isCreatingRoute = !isCreatingRoute
@@ -112,16 +112,23 @@ class MapFragment : Fragment() {
                     // No hacer nada en ACTION_DOWN, simplemente permitir que el mapa maneje el evento
                     mapView.onTouchEvent(motionEvent)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     // Si es un toque simple (es decir, no hubo movimiento significativo entre ACTION_DOWN y ACTION_UP)
                     if (motionEvent.eventTime - motionEvent.downTime < tapTimeout) {
                         // Mostrar el diálogo para ingresar el nombre del punto
-                        showNameInputDialog(mapView.projection.fromPixels(motionEvent.x.toInt(), motionEvent.y.toInt()) as GeoPoint)
+                        showNameInputDialog(
+                            mapView.projection.fromPixels(
+                                motionEvent.x.toInt(),
+                                motionEvent.y.toInt()
+                            ) as GeoPoint
+                        )
                         true // Indica que el evento ha sido manejado
                     } else {
                         false // Permitir que el mapa maneje el evento si es un gesto largo
                     }
                 }
+
                 else -> false
             }
         }
