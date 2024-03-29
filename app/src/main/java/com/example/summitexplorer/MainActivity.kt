@@ -6,26 +6,13 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
-import com.example.summitexplorer.database.AppDatabase
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var database: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        lifecycleScope.launch {
-            database = withContext(Dispatchers.IO) {
-                Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app_database")
-                    .build()
-            }
-        }
         val isLogged = sharedPreferences.getBoolean("isLogged", false)
         if (isLogged) {
             showHomePage()
