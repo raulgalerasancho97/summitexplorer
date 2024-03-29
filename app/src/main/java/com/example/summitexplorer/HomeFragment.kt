@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
 
         val service = retrofit.create(WeatherService::class.java)
 
-        val apiKey = "0eb379923e477dd1f26a6abdff420d2a" // Reemplaza esto con tu API Key
+        val apiKey = ApiKeys.OPENWEATHERMAP_API_KEY
         val city = "Madrid"
         val units = "metric"
         val lang = "es"
@@ -103,7 +103,6 @@ class HomeFragment : Fragment() {
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
                 Log.e("miError", "Error fetching weather", t)
                 t.printStackTrace()
-                // Handle failure
             }
         })
     }
