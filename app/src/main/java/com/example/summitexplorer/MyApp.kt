@@ -3,6 +3,7 @@ package com.example.summitexplorer
 import android.app.Application
 import androidx.room.Room
 import com.example.summitexplorer.database.AppDatabase
+import com.google.firebase.FirebaseApp
 
 class MyApp : Application() {
 
