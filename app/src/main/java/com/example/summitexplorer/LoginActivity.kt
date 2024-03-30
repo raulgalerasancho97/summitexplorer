@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                         if (userDao.getUserByEmailAndPassword(email, password) != null) {
                             val username = userDao.getUserByEmail(email)!!.username
                             sharedPreferences.edit().putBoolean("isLogged", true).apply()
-                            sharedPreferences.edit().putString("userName", username).apply()
+                            sharedPreferences.edit().putString("userEmail", email).apply()
                             redirectToHome()
                         } else {
                             runOnUiThread {

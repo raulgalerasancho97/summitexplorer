@@ -67,7 +67,7 @@ class RegisterActivity : AppCompatActivity() {
                         val newUser = User(username = name, email = email, password = password)
                         userDao.insertUser(newUser)
                         sharedPreferences.edit().putBoolean("isLogged", true).apply()
-                        sharedPreferences.edit().putString("userName", name).apply()
+                        sharedPreferences.edit().putString("userEmail", email).apply()
                         AuthManager().registerWithEmailPassword(email, password) { success, error ->
                             if (success) {
                                 // El usuario se registró exitosamente en Firebase

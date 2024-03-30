@@ -17,7 +17,7 @@ class MyApp : Application() {
         // Inicializa la base de datos aquí
         database = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java, "app-database"
+            AppDatabase::class.java, "SummitExplorerDB"
         ).build()
     }
 }
