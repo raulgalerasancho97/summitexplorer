@@ -72,7 +72,6 @@ class RegisterActivity : AppCompatActivity() {
                             if (success) {
                                 // El usuario se registró exitosamente en Firebase
                                 Log.e("AuthManager", "Registro exitoso")
-                                redirectToHome()
                             } else {
                                 // Hubo un error al registrar el usuario en Firebase
                                 // Puedes manejar el error aquí

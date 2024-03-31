@@ -52,9 +52,9 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val userName = sharedPreferences.getString("userName", "Anónimo")
+        val userEmail = sharedPreferences.getString("userEmail", "Anónimo")
         val helloText = view.findViewById<TextView>(R.id.helloText)
-        helloText.text = "Bienvenido de nuevo $userName"
+        helloText.text = "Bienvenido de nuevo $userEmail"
         fetchTemperature(view)
         return view
     }
