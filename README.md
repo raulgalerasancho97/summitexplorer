@@ -19,12 +19,12 @@ Workspace: (https://upm365.sharepoint.com/sites/MAD2024_DR/SitePages/Tr.aspx)
 An application for saving hiking trails in the mountains of Madrid. It provides real-time location, weather conditions in the area, the ability to create personalized routes, and view them on the map. A logging and registration system developed with Room and Firebase.
 ## Screenshots
 
-![Login Screen](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![Register Screen](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![Home Screen](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![Map Screen](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![List Screen](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-![Settings Screen](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![Login Screen](https://github.com/raulgalerasancho97/summitexplorer/blob/master/resources/login.jpeg)
+![Register Screen](https://github.com/raulgalerasancho97/summitexplorer/blob/master/resources/register.jpeg)
+![Home Screen](https://github.com/raulgalerasancho97/summitexplorer/blob/master/resources/home.jpeg)
+![Map Screen](https://github.com/raulgalerasancho97/summitexplorer/blob/master/resources/map.jpeg)
+![List Screen](https://github.com/raulgalerasancho97/summitexplorer/blob/master/resources/list.jpeg)
+![Settings Screen](https://github.com/raulgalerasancho97/summitexplorer/blob/master/resources/settings.jpeg)
 
 
 ## Demo Video
