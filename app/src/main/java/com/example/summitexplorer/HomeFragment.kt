@@ -1,14 +1,20 @@
 package com.example.summitexplorer
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -18,6 +24,8 @@ import retrofit2.http.Query
 
 class HomeFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationTextView: TextView
 
     interface WeatherService {
         @GET("weather")
@@ -56,7 +64,41 @@ class HomeFragment : Fragment() {
         val helloText = view.findViewById<TextView>(R.id.helloText)
         helloText.text = "Bienvenido de nuevo $userEmail"
         fetchTemperature(view)
+        locationTextView = view.findViewById(R.id.locationTextView)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fetchLocation()
         return view
+    }
+
+    private fun fetchLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+            return
+        }
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                location?.let {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    locationTextView.text = "Latitud: $latitude, Longitud: $longitude"
+                }
+            }
+    }
+
+
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSION = 1
     }
 
     private fun fetchTemperature(view: View) {

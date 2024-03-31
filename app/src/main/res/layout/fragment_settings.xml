@@ -5,31 +5,18 @@
     android:orientation="vertical"
     android:padding="30dp">
 
-    <!-- CheckBoxes de prueba -->
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonTheme"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings option 1" />
+        android:layout_marginTop="20dp"
+        android:text="Cambiar Tema" />
 
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings option 2" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings option 3" />
-
-    <!-- Botón para cerrar sesión -->
     <Button
         android:id="@+id/buttonLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:text="Cerrar Sesión" />
 
 </LinearLayout>
