@@ -39,24 +39,20 @@ class ListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_list, container, false)
 
-        // Inicializar DAOs
         routeDao = MyApp.database.routeDao()
         pointDao = MyApp.database.pointDao()
         userDao = MyApp.database.userDao()
         sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
 
-        // Obtener el ID del usuario loggeado
         val userEmail = sharedPreferences.getString("userEmail", "Anónimo") ?: "Anónimo"
         lifecycleScope.launch {
             userId = withContext(Dispatchers.IO) {
                 userDao.getUserIdByEmail(userEmail)
             }
-            // Obtener todas las rutas para el usuario loggeado
             val userRoutes = withContext(Dispatchers.IO) {
                 routeDao.getRoutesForUser(userId)
             }
-            // Por cada ruta, obtener los puntos asociados
             val routesWithPoints = mutableListOf<Pair<Route, List<Point>>>()
             userRoutes?.forEach { route ->
                 val routePoints = withContext(Dispatchers.IO) {
@@ -64,7 +60,6 @@ class ListFragment : Fragment() {
                 }
                 routesWithPoints.add(Pair(route, routePoints ?: listOf()))
             }
-            // Inicializar y configurar el RecyclerView y el adaptador
             recyclerView = view.findViewById(R.id.recyclerView)
             adapter = RouteAdapter(routesWithPoints)
             recyclerView.adapter = adapter
